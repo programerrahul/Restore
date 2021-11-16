@@ -3,8 +3,11 @@
 //   {name:"Product1",price:100},
 //   {name:"Product2",price:200}
 
+import { Container, CssBaseline } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Product } from "./Product";
+import Catalog from "../../features/catalog/catalog";
+import { Product } from "../models/Product";
+import Header from "./Header";
 
 // ]
 function App() {
@@ -17,6 +20,7 @@ function App() {
  },[]);
 
  function addProduct(){
+   console.log("in add product function");
    //setProduct([...products,{name:"Product1",price:100}]);  // concat the new array object in products 
    //setProduct(prevState=>[...prevState,{name:"Product"+(prevState.length+1),price:(prevState.length+1)*100}]);  // concat the new array object in products 
    setProduct(prevState=>[...prevState,
@@ -29,19 +33,13 @@ function App() {
   }]);
  }
   return (
-    <div>
-      <h1>Restore</h1>
-      <ul>
-      {
-      products.map(
-        (item)=>(
-      <li key={item.id}> {item.name}-{item.price}</li>
-      )
-      )  
-      }
-      </ul>
-      <button onClick={addProduct}>Add</button>
-    </div>
+    <>
+    <CssBaseline/>
+      <Header/>
+      <Container>
+    <Catalog products={products} addProduct={addProduct}/>
+    </Container>
+    </>
   );
 }
 
