@@ -1,45 +1,45 @@
 
-// const products=[
-//   {name:"Product1",price:100},
-//   {name:"Product2",price:200}
 
 import { Container, CssBaseline } from "@mui/material";
-import { useEffect, useState } from "react";
+
 import Catalog from "../../features/catalog/catalog";
-import { Product } from "../models/Product";
 import Header from "./Header";
+import createTheme from '@mui/material/styles/createTheme';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { useState } from "react";
+import { Route } from "react-router";
+import Home from "../../features/Home/HomePage";
+import About from "../../features/About/AboutPage";
+import Contact from "../../features/Contact/ContactPage";
 
-// ]
 function App() {
-
- //const [products,setProduct]=useState([{name:"Product1",price:100},{name:"Product2",price:200}]);
- const [products,setProduct]=useState<Product[]>([]);  // declare with product interface
+const [darkMode,setDarkMode]=useState(false);
+const paletteType=darkMode?'dark':'light'
+  const theme=createTheme(
+{
+  palette:{
+    mode:paletteType,
+    background:{default:paletteType==='light'?'#eaeaea':'#121212'}
+  }
+}
+  );
+  function handleThemeChange(){
+    setDarkMode(!darkMode);
+  }
  
- useEffect(()=>{
-   fetch("http://localhost:5000/api/products").then(res=>res.json()).then(data=>setProduct(data))
- },[]);
-
- function addProduct(){
-   console.log("in add product function");
-   //setProduct([...products,{name:"Product1",price:100}]);  // concat the new array object in products 
-   //setProduct(prevState=>[...prevState,{name:"Product"+(prevState.length+1),price:(prevState.length+1)*100}]);  // concat the new array object in products 
-   setProduct(prevState=>[...prevState,
-    {name:"Product"+(prevState.length+1),
-    price:(prevState.length+1)*100,
-    id:prevState.length+1,
-    brand:"Some brand",
-    description:"some descritpion",
-    pictureUrl:"http://picsum.photos/200"
-  }]);
- }
   return (
-    <>
+    <ThemeProvider theme={theme}>
     <CssBaseline/>
-      <Header/>
+      <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
       <Container>
-    <Catalog products={products} addProduct={addProduct}/>
+      <Route path="/" exact component={Home} />
+      <Route path="/Catalog" exact component={Catalog} />
+      <Route path="/About" component={About} />
+      <Route path="/Contact" component={Contact} />
+      <Route path="/Catalog/:id" component={Catalog} />
+   
     </Container>
-    </>
+    </ThemeProvider>
   );
 }
 
